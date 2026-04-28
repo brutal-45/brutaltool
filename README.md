@@ -3,4 +3,4 @@
 IT IS A FREE 💜 PDF EDITING TOOL
 
 
-This tool makes only html 
+This tool makes only html  
