@@ -2,7 +2,10 @@ name: python script
 
 on:
   workflow_dispatch:
-  # Trigger manually once, and it will loop
+  workflow_run:
+    workflows: ["python script"]
+    types:
+      - completed
 
 permissions:
   contents: write
@@ -12,13 +15,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Run every 5 minutes in a loop
+      - name: Run every 3 minutes for 5 hours
         run: |
           git config user.name "brutal-45"
           git config user.email "creatorsports81@gmail.com"
           
-          # Run for 5 hours (60 iterations x 5 minutes = 300 minutes)
-          for i in {1..60}; do
+          # 100 iterations x 3 minutes = 300 minutes (5 hours)
+          # Keeps execution safely under GitHub's 6-hour execution limit
+          for i in {1..100}; do
             TIMESTAMP_FILE="updates.txt"
             echo "Last checked: $(date -u +"%Y-%m-%dT%H:%M:%SZ")" > "$TIMESTAMP_FILE"
             git add "$TIMESTAMP_FILE"
@@ -28,6 +32,6 @@ jobs:
               git push origin HEAD
             fi
             
-            echo "Waiting 5 minutes..."
-            sleep 300
+            echo "Waiting 3 minutes..."
+            sleep 180
           done
